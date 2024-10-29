@@ -7,7 +7,7 @@ meta <- read_excel("data/lysotracker_7dpf_23102024.xlsx") %>%
     genotype = factor(genotype, levels = c("wt", "het", "hom"))
   )
 
-read_csv("data/Results_FIJI_macro.csv") %>%
+data <- read_csv("data/Results_FIJI_macro.csv") %>%
   dplyr::select(-1) %>%
   mutate(
     # get the fish_id to match with the genotype metadata
@@ -16,10 +16,48 @@ read_csv("data/Results_FIJI_macro.csv") %>%
       as.numeric(),
     .after = Label
     ) %>%
-  left_join(meta) %>%
+  left_join(meta)
+
+# output to send to betty
+data %>%
+  write.csv("output/resultswgeno.csv")
+
+data %>%
   ggbarplot(
     x = "genotype",
     y = "IntDen",
     add = c("mean_sd", "jitter")
-    )
-  #stat_compare_means()
+    ) +
+  stat_compare_means()
+
+data %>%
+  ggbarplot(
+    x = "genotype",
+    y = "Area",
+    add = c("mean_sd", "jitter")
+  ) +
+  stat_compare_means()
+
+data %>%
+  ggbarplot(
+    x = "genotype",
+    y = "RawIntDen",
+    add = c("mean_sd", "jitter")
+  ) +
+  stat_compare_means()
+
+data %>%
+  ggbarplot(
+    x = "genotype",
+    y = "Mean",
+    add = c("mean_sd", "jitter")
+  ) +
+  stat_compare_means()
+
+data %>%
+  ggbarplot(
+    x = "genotype",
+    y = "RawIntDen",
+    add = c("mean_sd", "jitter")
+  ) +
+  stat_compare_means()
